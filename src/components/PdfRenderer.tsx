@@ -4,6 +4,7 @@ import {
   ChevronUp,
   Currency,
   Loader2,
+  RotateCw,
   Search,
 } from 'lucide-react';
 import { Document, Page, pdfjs } from 'react-pdf';
@@ -38,6 +39,7 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
   const [numPages, setNumPages] = useState<number>();
   const [currPage, setCurrPage] = useState<number>(1);
   const [scale, setScale] = useState<number>(1);
+  const [rotation, setRotation] = useState<number>(0);
 
   const CustomPageValidator = z.object({
     page: z
@@ -115,7 +117,7 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
         <div className="space-x-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button className="g-1.5" aria-label="zoom" variant="ghost">
+              <Button className="gap-1.5" aria-label="zoom" variant="ghost">
                 <Search className="h-4 w-4" />
                 {scale * 100}%<ChevronDown className="h-3 w-3 opacity-50" />
               </Button>
@@ -135,6 +137,14 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <Button
+            onClick={() => setRotation((prev) => prev + 90)}
+            aria-label="rotate 90 degree"
+            variant="ghost"
+          >
+            <RotateCw className="h-4 w-4" />
+          </Button>
         </div>
       </div>
 
@@ -168,6 +178,7 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
                 pageNumber={currPage}
                 scale={scale}
                 width={width ? width : 1}
+                rotate={rotation}
               />
             </Document>
           </div>
